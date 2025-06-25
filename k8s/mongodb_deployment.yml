@@ -23,7 +23,6 @@ spec:
         - "mongod"
         - "--bind_ip_all"
         - "--storageEngine=wiredTiger"
-        - "0.0.0.0"
        env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
