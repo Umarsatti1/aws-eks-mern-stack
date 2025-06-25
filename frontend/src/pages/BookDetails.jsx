@@ -5,7 +5,6 @@ import axios from 'axios';
 import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 
-
 const BookDetails = () => {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -13,7 +12,7 @@ const BookDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`http://localhost:5000/books/${id}`)
+    axios.get(`/books/${id}`)
       .then((response) => {
         setBook(response.data);
         setLoading(false);
