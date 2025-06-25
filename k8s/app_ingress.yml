@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - host: aws-eks-mern-app-example
+  - host: mernapp.local
     http:
       paths:
       - path: /books

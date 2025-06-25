@@ -1,57 +1,60 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: backend-deployment
- namespace: mern-app
- labels:
-   tier: backend
+  name: backend-deployment
+  namespace: mern-app
+  labels:
+    tier: backend
 spec:
- replicas: 1
- selector:
-   matchLabels:
-     tier: backend
- template:
-   metadata:
-     labels:
-       tier: backend
-   spec:
-     containers:
-     - name: backend
-       image: 730335208305.dkr.ecr.us-east-1.amazonaws.com/mern-app-backend:latest
-       imagePullPolicy: Always
-       env:
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-credentials
-              key: connectionString
-        - name: MONGODB_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-credentials
-              key: username
-        - name: MONGODB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-credentials
-              key: password
-       ports:
-       - containerPort: 5000
-       livenessProbe:
-         httpGet:
-           path: /
-           port: 5000
-         initialDelaySeconds: 15
-         periodSeconds: 10
-       readinessProbe:
-         httpGet:
-           path: /
-           port: 5000
-         initialDelaySeconds: 15
-         periodSeconds: 10
-         successThreshold: 1
- strategy:
-   type: RollingUpdate
-   rollingUpdate:
-     maxSurge: 1
-     maxUnavailable: 20%
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: backend
+  template:
+    metadata:
+      labels:
+        tier: backend
+    spec:
+      containers:
+      - name: backend
+        image: 730335208305.dkr.ecr.us-east-1.amazonaws.com/mern-app-backend:latest
+        imagePullPolicy: Always
+        env:
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-credentials
+                key: connectionString
+          - name: MONGODB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-credentials
+                key: username
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-credentials
+                key: password
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
