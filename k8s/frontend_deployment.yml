@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: frontend-deployment
+ namespace: mern-app
+ labels:
+   tier: frontend
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     tier: frontend
+ template:
+   metadata:
+     labels:
+       tier: frontend
+   spec:
+     containers:
+     - name: frontend
+       image: 730335208305.dkr.ecr.us-east-1.amazonaws.com/mern-app-frontend:latest
+       imagePullPolicy: Always
+       ports:
+       - containerPort: 80
+ strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 1
+     maxUnavailable: 20%

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: mongodb-deployment
+ namespace: mern-app
+ labels:
+   tier: database
+spec:
+ replicas: 1
+ selector:
+   matchLabels:
+     tier: database
+ template:
+   metadata:
+     labels:
+       tier: database
+   spec:
+     containers:
+     - name: mongodb
+       image: mongo:7.0.21
+       imagePullPolicy: Always
+       command:
+        - "mongod"
+        - "--bind_ip_all"
+        - "--storageEngine=wiredTiger"
+        - "0.0.0.0"
+       env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: password
+       ports:
+       - containerPort: 27017
+       resources:
+         requests:
+           memory: "512Mi"
+           cpu: "500m"
+         limits:
+           memory: "1Gi"
+           cpu: "1"
